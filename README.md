@@ -1,5 +1,9 @@
 # Rust Laboratory Adventure
 
+![GitHub stars](https://img.shields.io/github/stars/Ali-Marandi/RustTextAdventure?style=social)
+![License](https://img.shields.io/github/license/Ali-Marandi/RustTextAdventure)
+![Rust Version](https://img.shields.io/badge/rust-1.70%2B-orange)
+
 A professional, creative, and robust text-based adventure game built with Rust. This project demonstrates the power of Rust's ownership model, pattern matching, and efficient data handling in a creative context.
 
 ## Features
