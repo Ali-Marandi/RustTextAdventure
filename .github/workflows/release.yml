@@ -1,0 +1,71 @@
+name: Release Windows
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version ">=2.0"
+
+      - name: Build Tauri App
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: src-tauri
+          tagName: ${{ github.ref_name }}
+          releaseName: 'The Rust Laboratory v__VERSION__'
+          releaseBody: |
+            ## The Rust Laboratory - Text Adventure Game v__VERSION__
+
+            ### Features
+            - 14+ interconnected rooms to explore
+            - Rich narrative with branching story
+            - 20+ collectible items with detailed descriptions
+            - 6 challenging puzzles to solve
+            - 13 achievements to unlock
+            - Save/Load system with 3 slots
+            - Interactive minimap
+            - Beautiful cyberpunk dark theme GUI
+            - Auto-complete command system
+            - Command history navigation
+
+            ### Installation
+            1. Download `RustTextAdventure_2.0.0_x64-setup.exe` (or `.msi`)
+            2. Run the installer
+            3. Launch "The Rust Laboratory" from your desktop
+
+            ### Controls
+            - Type commands to interact with the world
+            - Use arrow keys for command history
+            - Tab for autocomplete
+            - Click exits on the exits bar for quick navigation
+          releaseDraft: false
+          prerelease: false
+          includeUpdaterJson: false

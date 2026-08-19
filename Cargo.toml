@@ -1,25 +1,14 @@
 [package]
-name = "rust-laboratory-signal-zero"
-version = "0.1.0"
+name = "rust-text-adventure"
+version = "2.0.0"
 edition = "2021"
 authors = ["Ali-Marandi"]
-description = "A polished, narrative-driven laboratory mystery for Windows."
+description = "A commercial-grade text-based adventure game with beautiful GUI - The Rust Laboratory"
 license = "MIT"
 repository = "https://github.com/Ali-Marandi/RustTextAdventure"
+readme = "README.md"
+keywords = ["game", "text-adventure", "tauri", "rust", "gui"]
+categories = ["games"]
 
-[dependencies]
-eframe = { version = "0.24", default-features = true }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-directories = "5.0"
-
-[dev-dependencies]
-pretty_assertions = "1.4"
-
-[profile.release]
-lto = true
-codegen-units = 1
-strip = true
-
-[target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3.9", features = ["winuser", "windef"] }
+[workspace]
+members = ["src-tauri"]

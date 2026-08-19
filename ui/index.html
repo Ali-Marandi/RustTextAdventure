@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rust Laboratory</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ======== SPLASH SCREEN ======== -->
+        <div id="splash-screen" class="screen active">
+            <div class="splash-content">
+                <div class="splash-logo">
+                    <div class="logo-circuit"></div>
+                    <h1 class="splash-title">THE RUST<br><span>LABORATORY</span></h1>
+                    <p class="splash-subtitle">A Text Adventure Game</p>
+                </div>
+                <div class="splash-menu">
+                    <button class="splash-btn primary" onclick="startNewGame()">
+                        <span class="btn-icon">⚡</span> New Game
+                    </button>
+                    <button class="splash-btn" onclick="showLoadScreen()">
+                        <span class="btn-icon">⏳</span> Load Game
+                    </button>
+                    <button class="splash-btn" onclick="showSettings()">
+                        <span class="btn-icon">⚙</span> Settings
+                    </button>
+                </div>
+                <p class="splash-credits">Built with Rust + Tauri | v2.0.0</p>
+            </div>
+            <canvas id="splash-particles"></canvas>
+        </div>
+
+        <!-- ======== MAIN GAME SCREEN ======== -->
+        <div id="game-screen" class="screen">
+            <div class="game-layout">
+                <!-- LEFT SIDEBAR -->
+                <aside class="sidebar left-sidebar">
+                    <div class="sidebar-section" id="player-stats">
+                        <h3 class="section-title"><span>ℹ</span> Status</h3>
+                        <div class="stat-row">
+                            <span class="stat-label">Score</span>
+                            <span class="stat-value" id="stat-score">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Moves</span>
+                            <span class="stat-value" id="stat-moves">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Rooms</span>
+                            <span class="stat-value" id="stat-rooms">0/14</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Items</span>
+                            <span class="stat-value" id="stat-items">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Puzzles</span>
+                            <span class="stat-value" id="stat-puzzles">0</span>
+                        </div>
+                    </div>
+                    <div class="sidebar-section" id="minimap-section">
+                        <h3 class="section-title"><span>⚑</span> Map</h3>
+                        <canvas id="minimap" width="200" height="200"></canvas>
+                    </div>
+                </aside>
+
+                <!-- MAIN CONTENT -->
+                <main class="game-main">
+                    <header class="game-header">
+                        <div class="room-indicator">
+                            <span class="room-icon">⌂</span>
+                            <h2 id="room-name">Laboratory Entrance</h2>
+                        </div>
+                        <div class="header-actions">
+                            <button class="icon-btn" onclick="showSaveScreen()" title="Save">⏳</button>
+                            <button class="icon-btn" onclick="showSettings()" title="Settings">⚙</button>
+                            <button class="icon-btn" onclick="showHelp()" title="Help">❓</button>
+                        </div>
+                    </header>
+
+                    <div class="game-content">
+                        <div id="message-log" class="message-log"></div>
+
+                        <div class="ground-items" id="ground-items"></div>
+
+                        <div class="exits-bar" id="exits-bar"></div>
+                    </div>
+
+                    <div class="input-area">
+                        <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+                        <div class="input-wrapper">
+                            <span class="input-prompt">❯</span>
+                            <input type="text" id="command-input" placeholder="Type a command..." autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
+                </main>
+
+                <!-- RIGHT SIDEBAR -->
+                <aside class="sidebar right-sidebar">
+                    <div class="sidebar-section">
+                        <h3 class="section-title"><span>⌁</span> Inventory</h3>
+                        <div id="inventory-list" class="inventory-list">
+                            <p class="empty-msg">No items yet</p>
+                        </div>
+                    </div>
+                    <div class="sidebar-section">
+                        <h3 class="section-title"><span>★</span> Achievements</h3>
+                        <div id="achievements-list" class="achievements-list">
+                            <p class="empty-msg">None unlocked</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <!-- ======== MODALS ======== -->
+        <div class="modal-overlay" id="modal-overlay">
+            <div class="modal" id="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">Modal</h3>
+                    <button class="close-btn" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body" id="modal-body"></div>
+            </div>
+        </div>
+
+        <!-- ======== NOTIFICATION ======== -->
+        <div id="notification" class="notification"></div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
