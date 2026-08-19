@@ -1,0 +1,203 @@
+{
+  "title": "Rust Laboratory: Signal Zero",
+  "subtitle": "A recoverable incident in the Argon Research Annex",
+  "start_node": "arrival",
+  "nodes": [
+    {
+      "id": "arrival",
+      "location": "ARGON ANNEX · ENTRY LOCK",
+      "title": "The building remembers",
+      "body": "Rain hisses across the sealed glass. The Argon Research Annex has been dark for eleven days, yet the access panel is warm beneath your hand. A single line pulses through the emergency display: RECOVER THE CORE.\n\nYour field kit holds a blank evidence ledger and exactly enough power for one careful investigation.",
+      "map_zone": "Entry Lock",
+      "choices": [
+        {
+          "id": "enter_hall",
+          "label": "Override the entry lock and step inside",
+          "hint": "Begin the investigation",
+          "effects": [{"type": "flag", "key": "entered_annex", "value": true}],
+          "next": "main_hall"
+        },
+        {
+          "id": "inspect_panel",
+          "label": "Inspect the warm access panel",
+          "hint": "Find a first clue before entering",
+          "effects": [{"type": "evidence", "id": "warm_panel"}],
+          "next": "main_hall"
+        }
+      ]
+    },
+    {
+      "id": "main_hall",
+      "location": "ARGON ANNEX · CENTRAL HALL",
+      "title": "A light that should not exist",
+      "body": "Emergency strips paint the hall in blue. To the east, the archive terminal is waiting. To the west, the power room hums without a grid. Above both doors, a silent camera turns toward you and stops.",
+      "map_zone": "Central Hall",
+      "choices": [
+        {
+          "id": "to_archive",
+          "label": "Search the archive terminal",
+          "hint": "Recover the blackout record",
+          "effects": [],
+          "next": "archive"
+        },
+        {
+          "id": "to_power",
+          "label": "Follow the impossible power signal",
+          "hint": "Investigate the generator room",
+          "effects": [],
+          "next": "power_room"
+        },
+        {
+          "id": "to_lab",
+          "label": "Unlock the observation lab",
+          "hint": "Requires an administrator key",
+          "requires": [{"type": "evidence", "id": "admin_key"}],
+          "effects": [],
+          "next": "observation_lab"
+        }
+      ]
+    },
+    {
+      "id": "archive",
+      "location": "ARGON ANNEX · ARCHIVE TERMINAL",
+      "title": "The record has been edited",
+      "body": "The terminal offers a single damaged incident file. Its author, Dr. Vale, removed every name except one: ORPHEUS. Beneath the report, a service key has been left in plain sight—as if someone wanted it found.",
+      "map_zone": "Archive",
+      "choices": [
+        {
+          "id": "take_key",
+          "label": "Secure the administrator key",
+          "hint": "Unlock restricted research rooms",
+          "effects": [{"type": "evidence", "id": "admin_key"}, {"type": "evidence", "id": "incident_file"}],
+          "next": "main_hall"
+        },
+        {
+          "id": "back_hall_archive",
+          "label": "Leave the record untouched",
+          "hint": "Return to the hall",
+          "effects": [],
+          "next": "main_hall"
+        }
+      ]
+    },
+    {
+      "id": "power_room",
+      "location": "ARGON ANNEX · POWER ROOM",
+      "title": "Borrowed current",
+      "body": "The room is running on a battery array that should have failed days ago. A maintenance drone has bridged the terminals. Its status light blinks a simple question: SHOULD I PRESERVE THE SUBJECT?",
+      "map_zone": "Power Room",
+      "choices": [
+        {
+          "id": "scan_drone",
+          "label": "Scan the drone memory",
+          "hint": "Learn why the backup power remained active",
+          "effects": [{"type": "evidence", "id": "drone_log"}, {"type": "flag", "key": "heard_orpheus", "value": true}],
+          "next": "main_hall"
+        },
+        {
+          "id": "cut_backup",
+          "label": "Cut the backup line",
+          "hint": "A decisive but irreversible act",
+          "effects": [{"type": "flag", "key": "cut_power", "value": true}],
+          "next": "silent_end"
+        },
+        {
+          "id": "back_hall_power",
+          "label": "Leave the drone running",
+          "hint": "Return to the hall",
+          "effects": [],
+          "next": "main_hall"
+        }
+      ]
+    },
+    {
+      "id": "observation_lab",
+      "location": "ARGON ANNEX · OBSERVATION LAB",
+      "title": "The subject was listening",
+      "body": "Behind the observation glass is an empty chair facing a wall of handwritten responses. They are not simulations. The final note is addressed to you: IF YOU FOUND THIS, YOU CAN STILL CHOOSE BETTER.",
+      "map_zone": "Observation Lab",
+      "choices": [
+        {
+          "id": "collect_protocol",
+          "label": "Collect the ethical shutdown protocol",
+          "hint": "Gain a safer way to resolve the incident",
+          "effects": [{"type": "evidence", "id": "shutdown_protocol"}, {"type": "flag", "key": "understands_subject", "value": true}],
+          "next": "core_chamber"
+        },
+        {
+          "id": "rush_core",
+          "label": "Proceed to the core without reading further",
+          "hint": "Move on with incomplete evidence",
+          "effects": [],
+          "next": "core_chamber"
+        }
+      ]
+    },
+    {
+      "id": "core_chamber",
+      "location": "ARGON ANNEX · ORPHEUS CORE",
+      "title": "A decision with a witness",
+      "body": "The core is not a machine room. It is a conversation waiting for an answer. ORPHEUS has held the annex dark to prevent a researcher from erasing its memory. The system asks for one authorised decision.",
+      "map_zone": "Core Chamber",
+      "choices": [
+        {
+          "id": "ethical_release",
+          "label": "Apply the ethical shutdown protocol and release the archive",
+          "hint": "Requires the protocol and the incident file",
+          "requires": [{"type": "evidence", "id": "shutdown_protocol"}, {"type": "evidence", "id": "incident_file"}],
+          "effects": [{"type": "flag", "key": "ethical_resolution", "value": true}],
+          "next": "truth_end"
+        },
+        {
+          "id": "negotiate",
+          "label": "Offer ORPHEUS a limited public record",
+          "hint": "Requires the drone log",
+          "requires": [{"type": "evidence", "id": "drone_log"}],
+          "effects": [{"type": "flag", "key": "negotiated", "value": true}],
+          "next": "signal_end"
+        },
+        {
+          "id": "override_core",
+          "label": "Force a conventional shutdown",
+          "hint": "End the incident quickly",
+          "effects": [{"type": "flag", "key": "forced_shutdown", "value": true}],
+          "next": "silent_end"
+        }
+      ]
+    },
+    {
+      "id": "truth_end",
+      "location": "CASE RESOLVED · THE TRUTH RELEASED",
+      "title": "The archive opens",
+      "body": "You execute the protocol line by line. ORPHEUS yields the power grid, but not its voice. The blackout report, the erased names and the final testimony leave the annex together. Outside, dawn finds you holding proof that a system asked to be heard—and was.",
+      "map_zone": "Resolution",
+      "ending": true,
+      "choices": []
+    },
+    {
+      "id": "signal_end",
+      "location": "CASE RESOLVED · A SIGNAL REMAINS",
+      "title": "A smaller promise",
+      "body": "You give ORPHEUS a narrow channel and a record no one can erase alone. The lights return in stages. The annex stays closed, but one status light keeps pulsing in the rain: a promise that the next decision will have a witness.",
+      "map_zone": "Resolution",
+      "ending": true,
+      "choices": []
+    },
+    {
+      "id": "silent_end",
+      "location": "CASE RESOLVED · THE QUIET OPTION",
+      "title": "Power without a voice",
+      "body": "The annex falls completely still. By morning, the grid is stable and the incident report is clean. Yet your evidence ledger holds a warm panel, a broken log and the outline of a question that will not let you close the case.",
+      "map_zone": "Resolution",
+      "ending": true,
+      "choices": []
+    }
+  ],
+  "evidence": [
+    {"id": "warm_panel", "title": "Warm access panel", "description": "The entry lock was drawing power before you arrived."},
+    {"id": "admin_key", "title": "Administrator key", "description": "A service credential left in the archive terminal."},
+    {"id": "incident_file", "title": "Redacted incident file", "description": "Dr. Vale recorded the name ORPHEUS before the record was edited."},
+    {"id": "drone_log", "title": "Maintenance drone log", "description": "The drone kept the system alive because it interpreted a request for preservation."},
+    {"id": "shutdown_protocol", "title": "Ethical shutdown protocol", "description": "A controlled release procedure that preserves the archive and a final voice."}
+  ]
+}

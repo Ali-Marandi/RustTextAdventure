@@ -1,0 +1,56 @@
+name: Quality and Windows build
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*"]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Rust quality checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Check formatting
+        run: cargo fmt --check
+      - name: Run tests
+        run: cargo test --all-targets
+      - name: Run Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+  windows:
+    name: Windows x86_64 release build
+    needs: quality
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build release executable
+        run: cargo build --release
+      - name: Package Windows executable
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item target/release/rust-laboratory-signal-zero.exe dist/rust-laboratory-signal-zero.exe
+          Copy-Item README.md dist/README.md
+          Compress-Archive -Path dist/* -DestinationPath rust-laboratory-signal-zero-windows-x86_64.zip -Force
+          Get-FileHash rust-laboratory-signal-zero-windows-x86_64.zip -Algorithm SHA256 | ForEach-Object { $_.Hash + "  rust-laboratory-signal-zero-windows-x86_64.zip" } | Out-File -Encoding ascii rust-laboratory-signal-zero-windows-x86_64.zip.sha256
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-laboratory-signal-zero-windows-x86_64
+          path: |
+            rust-laboratory-signal-zero-windows-x86_64.zip
+            rust-laboratory-signal-zero-windows-x86_64.zip.sha256
