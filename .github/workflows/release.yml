@@ -25,47 +25,52 @@ jobs:
         with:
           workspaces: src-tauri
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Tauri CLI
-        run: cargo install tauri-cli --version ">=2.0"
+      - name: Install Tauri CLI v2
+        run: cargo install tauri-cli --version "^2"
 
       - name: Build Tauri App
-        uses: tauri-apps/tauri-action@v0
+        shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd src-tauri
+          cargo tauri build --bundles none --target x86_64-pc-windows-msvc
+
+      - name: Package executable
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item src-tauri/target/x86_64-pc-windows-msvc/release/RustTextAdventure.exe dist/
+          Copy-Item README.md dist/
+          Compress-Archive -Path dist/* -DestinationPath RustTextAdventure_windows_x64.zip -Force
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          projectPath: src-tauri
-          tagName: ${{ github.ref_name }}
-          releaseName: 'The Rust Laboratory v__VERSION__'
-          releaseBody: |
-            ## The Rust Laboratory - Text Adventure Game v__VERSION__
+          files: RustTextAdventure_windows_x64.zip
+          name: 'The Rust Laboratory v2.0.0'
+          body: |
+            ## The Rust Laboratory - Text Adventure Game v2.0.0
 
             ### Features
             - 14+ interconnected rooms to explore
             - Rich narrative with branching story
-            - 20+ collectible items with detailed descriptions
-            - 6 challenging puzzles to solve
+            - 20+ collectible items
+            - 6 challenging puzzles
             - 13 achievements to unlock
             - Save/Load system with 3 slots
             - Interactive minimap
             - Beautiful cyberpunk dark theme GUI
-            - Auto-complete command system
+            - Smart autocomplete command system
             - Command history navigation
 
             ### Installation
-            1. Download `RustTextAdventure_2.0.0_x64-setup.exe` (or `.msi`)
-            2. Run the installer
-            3. Launch "The Rust Laboratory" from your desktop
+            1. Download `RustTextAdventure_windows_x64.zip`
+            2. Extract the ZIP file
+            3. Run `RustTextAdventure.exe`
 
-            ### Controls
-            - Type commands to interact with the world
-            - Use arrow keys for command history
-            - Tab for autocomplete
-            - Click exits on the exits bar for quick navigation
-          releaseDraft: false
+            > Note: Requires WebView2 Runtime (pre-installed on Windows 10/11)
+          draft: false
           prerelease: false
-          includeUpdaterJson: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

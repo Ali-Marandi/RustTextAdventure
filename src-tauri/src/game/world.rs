@@ -42,27 +42,70 @@ pub fn create_world() -> Vec<Room> {
             .to_string()
             + "like spokes of a wheel. A massive holographic display flickers in the center, "
             + "showing fragmented facility maps and warning messages.",
-        detailed_description: "The Main Hall is the architectural heart of the Prometheus Facility. "
-            .to_string()
-            + "Six massive corridors radiate from this central hub, each marked with "
-            + "color-coded signage. The floor is polished black marble with embedded "
-            + "LED strips forming intricate circuit patterns that pulse with soft light. "
-            + "In the exact center stands a three-meter holographic projector, currently "
-            + "displaying a corrupted map of the facility - sections blink in and out of "
-            + "existence. The walls are lined with shattered display cases that once held "
-            + "scientific awards and prototypes. Ceiling panels hang at dangerous angles, "
-            + "revealing a lattice of cables and conduits above.",
+        detailed_description:
+            "The Main Hall is the architectural heart of the Prometheus Facility. ".to_string()
+                + "Six massive corridors radiate from this central hub, each marked with "
+                + "color-coded signage. The floor is polished black marble with embedded "
+                + "LED strips forming intricate circuit patterns that pulse with soft light. "
+                + "In the exact center stands a three-meter holographic projector, currently "
+                + "displaying a corrupted map of the facility - sections blink in and out of "
+                + "existence. The walls are lined with shattered display cases that once held "
+                + "scientific awards and prototypes. Ceiling panels hang at dangerous angles, "
+                + "revealing a lattice of cables and conduits above.",
         exits: vec![
-            Exit { direction: Direction::South, target_room: "entrance".into(), description: Some("Back to the entrance".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::East, target_room: "library".into(), description: Some("A corridor lined with bookshelves".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::West, target_room: "server_room".into(), description: Some("A heavy security door with a card reader".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::North, target_room: "research_lab".into(), description: Some("Double doors marked 'AUTHORIZED PERSONNEL ONLY'".into()), locked: true, required_item: Some("facility_keycard".into()), hidden: false },
-            Exit { direction: Direction::Up, target_room: "observation_deck".into(), description: Some("A spiral staircase ascending into darkness".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::Down, target_room: "basement_storage".into(), description: Some("A service ladder descending into the depths".into()), locked: false, required_item: None, hidden: false },
+            Exit {
+                direction: Direction::South,
+                target_room: "entrance".into(),
+                description: Some("Back to the entrance".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::East,
+                target_room: "library".into(),
+                description: Some("A corridor lined with bookshelves".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::West,
+                target_room: "server_room".into(),
+                description: Some("A heavy security door with a card reader".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::North,
+                target_room: "research_lab".into(),
+                description: Some("Double doors marked 'AUTHORIZED PERSONNEL ONLY'".into()),
+                locked: true,
+                required_item: Some("facility_keycard".into()),
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::Up,
+                target_room: "observation_deck".into(),
+                description: Some("A spiral staircase ascending into darkness".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::Down,
+                target_room: "basement_storage".into(),
+                description: Some("A service ladder descending into the depths".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
         ],
         items: vec![],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("ambient_hum".into()),
         lighting: LightingLevel::Bright,
     });
@@ -116,12 +159,27 @@ pub fn create_world() -> Vec<Room> {
             + "vines, thick bundles of fiber optic cables connecting the servers in a "
             + "complex web of data pathways.",
         exits: vec![
-            Exit { direction: Direction::East, target_room: "main_hall".into(), description: Some("Back to the main hall".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::North, target_room: "network_hub".into(), description: Some("A reinforced door with a biometric lock".into()), locked: true, required_item: Some("biometric_key".into()), hidden: false },
+            Exit {
+                direction: Direction::East,
+                target_room: "main_hall".into(),
+                description: Some("Back to the main hall".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::North,
+                target_room: "network_hub".into(),
+                description: Some("A reinforced door with a biometric lock".into()),
+                locked: true,
+                required_item: Some("biometric_key".into()),
+                hidden: false,
+            },
         ],
         items: vec!["network_cable".into()],
         flags: vec!["servers_overloaded".into()],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("server_hum".into()),
         lighting: LightingLevel::Bright,
     });
@@ -146,13 +204,39 @@ pub fn create_world() -> Vec<Room> {
             + "workstation in the corner still has an active session, its screen showing "
             + "the last experiment's data.",
         exits: vec![
-            Exit { direction: Direction::South, target_room: "main_hall".into(), description: Some("Back to the main hall".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::East, target_room: "chemical_storage".into(), description: Some("A reinforced door with hazard warnings".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::North, target_room: "experiment_chamber".into(), description: Some("An airlock door with a warning sign".into()), locked: true, required_item: Some("hazard_suit".into()), hidden: false },
+            Exit {
+                direction: Direction::South,
+                target_room: "main_hall".into(),
+                description: Some("Back to the main hall".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::East,
+                target_room: "chemical_storage".into(),
+                description: Some("A reinforced door with hazard warnings".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::North,
+                target_room: "experiment_chamber".into(),
+                description: Some("An airlock door with a warning sign".into()),
+                locked: true,
+                required_item: Some("hazard_suit".into()),
+                hidden: false,
+            },
         ],
-        items: vec!["hazard_suit".into(), "lab_notes".into(), "chemical_formula".into()],
+        items: vec![
+            "hazard_suit".into(),
+            "lab_notes".into(),
+            "chemical_formula".into(),
+        ],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("lab_buzz".into()),
         lighting: LightingLevel::Bright,
     });
@@ -176,12 +260,18 @@ pub fn create_world() -> Vec<Room> {
             + "A high-powered telescope is mounted on a rotating platform, currently "
             + "pointed at the communications tower. Comfortable chairs suggest this was "
             + "once a place for scientists to take breaks and think.",
-        exits: vec![
-            Exit { direction: Direction::Down, target_room: "main_hall".into(), description: Some("Spiral staircase back down".into()), locked: false, required_item: None, hidden: false },
-        ],
+        exits: vec![Exit {
+            direction: Direction::Down,
+            target_room: "main_hall".into(),
+            description: Some("Spiral staircase back down".into()),
+            locked: false,
+            required_item: None,
+            hidden: false,
+        }],
         items: vec!["signal_flare".into(), "binoculars".into()],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("wind_quiet".into()),
         lighting: LightingLevel::Bright,
     });
@@ -205,12 +295,31 @@ pub fn create_world() -> Vec<Room> {
             + "shipping crate marked 'FRAGILE - PROMETHEUS PROJECT' sits against the "
             + "far wall, its lid slightly ajar.",
         exits: vec![
-            Exit { direction: Direction::Up, target_room: "main_hall".into(), description: Some("Service ladder back up".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::East, target_room: "generator_room".into(), description: Some("A heavy door with electrical warning signs".into()), locked: true, required_item: Some("circuit_breaker".into()), hidden: false },
+            Exit {
+                direction: Direction::Up,
+                target_room: "main_hall".into(),
+                description: Some("Service ladder back up".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::East,
+                target_room: "generator_room".into(),
+                description: Some("A heavy door with electrical warning signs".into()),
+                locked: true,
+                required_item: Some("circuit_breaker".into()),
+                hidden: false,
+            },
         ],
-        items: vec!["circuit_breaker".into(), "old_radio".into(), "toolbox".into()],
+        items: vec![
+            "circuit_breaker".into(),
+            "old_radio".into(),
+            "toolbox".into(),
+        ],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("dripping".into()),
         lighting: LightingLevel::Dim,
     });
@@ -233,12 +342,18 @@ pub fn create_world() -> Vec<Room> {
             + "facility. A leather armchair sits behind the desk, and two visitor chairs "
             + "face it. A hidden safe is set into the wall behind a painting, and a "
             + "personal computer sits on a side table, its screen locked.",
-        exits: vec![
-            Exit { direction: Direction::South, target_room: "library".into(), description: Some("Back to the library".into()), locked: false, required_item: None, hidden: false },
-        ],
+        exits: vec![Exit {
+            direction: Direction::South,
+            target_room: "library".into(),
+            description: Some("Back to the library".into()),
+            locked: false,
+            required_item: None,
+            hidden: false,
+        }],
         items: vec!["director_key".into(), "photograph".into()],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("clock_tick".into()),
         lighting: LightingLevel::Bright,
     });
@@ -262,12 +377,18 @@ pub fn create_world() -> Vec<Room> {
             + "facility's connections to other research stations around the globe, most "
             + "marked with red 'OFFLINE' indicators. A powerful decryption workstation "
             + "sits in the corner, its multiple monitors displaying complex algorithms.",
-        exits: vec![
-            Exit { direction: Direction::South, target_room: "server_room".into(), description: Some("Back to the server room".into()), locked: false, required_item: None, hidden: false },
-        ],
+        exits: vec![Exit {
+            direction: Direction::South,
+            target_room: "server_room".into(),
+            description: Some("Back to the server room".into()),
+            locked: false,
+            required_item: None,
+            hidden: false,
+        }],
         items: vec!["decrypted_files".into(), "biometric_key".into()],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("data_stream".into()),
         lighting: LightingLevel::Bright,
     });
@@ -291,12 +412,18 @@ pub fn create_world() -> Vec<Room> {
             + "like a hospital mixed with a swimming pool. Emergency showers and eye "
             + "wash stations are positioned at regular intervals. A spill containment "
             + "kit sits near the door, recently used.",
-        exits: vec![
-            Exit { direction: Direction::West, target_room: "research_lab".into(), description: Some("Back to the research lab".into()), locked: false, required_item: None, hidden: false },
-        ],
+        exits: vec![Exit {
+            direction: Direction::West,
+            target_room: "research_lab".into(),
+            description: Some("Back to the research lab".into()),
+            locked: false,
+            required_item: None,
+            hidden: false,
+        }],
         items: vec!["antidote".into(), "strange_compound".into()],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("bubbling".into()),
         lighting: LightingLevel::Bright,
     });
@@ -321,12 +448,27 @@ pub fn create_world() -> Vec<Room> {
             + "that spike dangerously high. The floor has a complex geometric pattern "
             + "etched into it, matching the energy patterns of the central device.",
         exits: vec![
-            Exit { direction: Direction::South, target_room: "research_lab".into(), description: Some("Back through the airlock".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::North, target_room: "escape_tunnel".into(), description: Some("A concealed door revealed by the device's energy".into()), locked: true, required_item: Some("prometheus_core".into()), hidden: true },
+            Exit {
+                direction: Direction::South,
+                target_room: "research_lab".into(),
+                description: Some("Back through the airlock".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::North,
+                target_room: "escape_tunnel".into(),
+                description: Some("A concealed door revealed by the device's energy".into()),
+                locked: true,
+                required_item: Some("prometheus_core".into()),
+                hidden: true,
+            },
         ],
         items: vec!["energy_cell".into()],
         flags: vec!["device_active".into()],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("energy_pulse".into()),
         lighting: LightingLevel::Bright,
     });
@@ -349,12 +491,18 @@ pub fn create_world() -> Vec<Room> {
             + "and ceiling. The room is hot and humid, with the constant hum of the "
             + "generator providing a deep bass undertone to all other sounds. A "
             + "maintenance log lies open on one of the control consoles.",
-        exits: vec![
-            Exit { direction: Direction::West, target_room: "basement_storage".into(), description: Some("Back to the basement".into()), locked: false, required_item: None, hidden: false },
-        ],
+        exits: vec![Exit {
+            direction: Direction::West,
+            target_room: "basement_storage".into(),
+            description: Some("Back to the basement".into()),
+            locked: false,
+            required_item: None,
+            hidden: false,
+        }],
         items: vec!["power_cell".into(), "maintenance_manual".into()],
         flags: vec!["generator_partial".into()],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("generator_hum".into()),
         lighting: LightingLevel::Dim,
     });
@@ -378,12 +526,27 @@ pub fn create_world() -> Vec<Room> {
             + "Graffiti on the walls - messages of hope and fear from those who passed "
             + "through before you.",
         exits: vec![
-            Exit { direction: Direction::South, target_room: "experiment_chamber".into(), description: Some("Back to the experiment chamber".into()), locked: false, required_item: None, hidden: false },
-            Exit { direction: Direction::North, target_room: "exit_chamber".into(), description: Some("Light visible at the end of the tunnel".into()), locked: false, required_item: None, hidden: false },
+            Exit {
+                direction: Direction::South,
+                target_room: "experiment_chamber".into(),
+                description: Some("Back to the experiment chamber".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
+            Exit {
+                direction: Direction::North,
+                target_room: "exit_chamber".into(),
+                description: Some("Light visible at the end of the tunnel".into()),
+                locked: false,
+                required_item: None,
+                hidden: false,
+            },
         ],
         items: vec!["final_note".into()],
         flags: vec![],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("echo".into()),
         lighting: LightingLevel::Dim,
     });
@@ -406,12 +569,18 @@ pub fn create_world() -> Vec<Room> {
             + "grow around the edges of the chamber, a stark contrast to the artificial "
             + "environment you've left behind. A path leads away from the facility, and "
             + "in the distance, you can see the lights of a town. You are free.",
-        exits: vec![
-            Exit { direction: Direction::South, target_room: "escape_tunnel".into(), description: Some("Back into the tunnel".into()), locked: false, required_item: None, hidden: false },
-        ],
+        exits: vec![Exit {
+            direction: Direction::South,
+            target_room: "escape_tunnel".into(),
+            description: Some("Back into the tunnel".into()),
+            locked: false,
+            required_item: None,
+            hidden: false,
+        }],
         items: vec![],
         flags: vec!["game_complete".into()],
-        visited: false, visit_count: 0,
+        visited: false,
+        visit_count: 0,
         ambient_sound: Some("nature_night".into()),
         lighting: LightingLevel::Bright,
     });

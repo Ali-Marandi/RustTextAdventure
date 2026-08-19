@@ -81,13 +81,16 @@ impl Player {
     }
 
     pub fn get_inventory_items(&self) -> Vec<InventoryItem> {
-        self.inventory.iter().map(|item| InventoryItem {
-            id: item.id.clone(),
-            name: item.name.clone(),
-            description: item.description.clone(),
-            icon: item.icon.clone(),
-            category: format!("{:?}", item.category),
-            usable: item.usable,
-        }).collect()
+        self.inventory
+            .iter()
+            .map(|item| InventoryItem {
+                id: item.id.clone(),
+                name: item.name.clone(),
+                description: item.description.clone(),
+                icon: item.icon.clone(),
+                category: format!("{:?}", item.category),
+                usable: item.usable,
+            })
+            .collect()
     }
 }

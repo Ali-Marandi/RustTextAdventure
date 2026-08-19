@@ -5,7 +5,7 @@ mod game;
 
 use game::{
     engine::GameEngine,
-    types::{GameConfig, GameResponse, CommandResult, SaveSlotInfo},
+    types::{CommandResult, GameConfig, GameResponse, SaveSlotInfo},
 };
 use std::sync::Mutex;
 use tauri::State;

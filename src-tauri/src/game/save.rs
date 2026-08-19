@@ -1,5 +1,5 @@
-use super::types::*;
 use super::engine::GameEngine;
+use super::types::*;
 use chrono::Local;
 
 // ============================================================
@@ -11,18 +11,33 @@ pub fn create_save_data(engine: &GameEngine, slot: u32) -> SaveData {
     let current_room = engine.rooms.iter().find(|r| r.id == engine.current_room_id);
     let room_name = current_room.map(|r| r.name.clone()).unwrap_or_default();
 
-    let room_states: std::collections::HashMap<String, SavedRoomState> = engine.rooms.iter().map(|r| {
-        (r.id.clone(), SavedRoomState {
-            visited: r.visited,
-            visit_count: r.visit_count,
-            items_remaining: r.items.clone(),
-            flags: r.flags.clone(),
-            exits_unlocked: r.exits.iter().filter(|e| !e.locked).map(|_| "unlocked".to_string()).collect(),
+    let room_states: std::collections::HashMap<String, SavedRoomState> = engine
+        .rooms
+        .iter()
+        .map(|r| {
+            (
+                r.id.clone(),
+                SavedRoomState {
+                    visited: r.visited,
+                    visit_count: r.visit_count,
+                    items_remaining: r.items.clone(),
+                    flags: r.flags.clone(),
+                    exits_unlocked: r
+                        .exits
+                        .iter()
+                        .filter(|e| !e.locked)
+                        .map(|_| "unlocked".to_string())
+                        .collect(),
+                },
+            )
         })
-    }).collect();
+        .collect();
 
-    let puzzle_states: std::collections::HashMap<String, bool> = engine.puzzles.iter()
-        .map(|p| (p.id.clone(), p.solved)).collect();
+    let puzzle_states: std::collections::HashMap<String, bool> = engine
+        .puzzles
+        .iter()
+        .map(|p| (p.id.clone(), p.solved))
+        .collect();
 
     SaveData {
         version: 2,
@@ -56,8 +71,7 @@ pub fn save_to_disk(data: &SaveData) -> Result<(), String> {
     let json = serde_json::to_string_pretty(data)
         .map_err(|e| format!("Failed to serialize save: {}", e))?;
 
-    std::fs::write(&file_path, json)
-        .map_err(|e| format!("Failed to write save: {}", e))?;
+    std::fs::write(&file_path, json).map_err(|e| format!("Failed to write save: {}", e))?;
 
     Ok(())
 }
@@ -71,8 +85,7 @@ pub fn load_from_disk(slot: u32) -> Result<SaveData, String> {
     let json = std::fs::read_to_string(&file_path)
         .map_err(|e| format!("No save found in slot {}: {}", slot, e))?;
 
-    serde_json::from_str(&json)
-        .map_err(|e| format!("Failed to parse save: {}", e))
+    serde_json::from_str(&json).map_err(|e| format!("Failed to parse save: {}", e))
 }
 
 pub fn delete_save_from_disk(slot: u32) -> Result<(), String> {
@@ -82,8 +95,7 @@ pub fn delete_save_from_disk(slot: u32) -> Result<(), String> {
 
     let file_path = dir.join(format!("save_slot_{}.json", slot));
     if file_path.exists() {
-        std::fs::remove_file(&file_path)
-            .map_err(|e| format!("Failed to delete save: {}", e))?;
+        std::fs::remove_file(&file_path).map_err(|e| format!("Failed to delete save: {}", e))?;
     }
     Ok(())
 }

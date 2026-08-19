@@ -1,14 +1,3 @@
-[package]
-name = "rust-text-adventure"
-version = "2.0.0"
-edition = "2021"
-authors = ["Ali-Marandi"]
-description = "A commercial-grade text-based adventure game with beautiful GUI - The Rust Laboratory"
-license = "MIT"
-repository = "https://github.com/Ali-Marandi/RustTextAdventure"
-readme = "README.md"
-keywords = ["game", "text-adventure", "tauri", "rust", "gui"]
-categories = ["games"]
-
 [workspace]
 members = ["src-tauri"]
+resolver = "2"

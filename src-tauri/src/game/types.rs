@@ -73,8 +73,8 @@ pub struct Room {
     pub description: String,
     pub detailed_description: String,
     pub exits: Vec<Exit>,
-    pub items: Vec<String>,      // Item IDs on the ground
-    pub flags: Vec<String>,      // Room state flags
+    pub items: Vec<String>, // Item IDs on the ground
+    pub flags: Vec<String>, // Room state flags
     pub visited: bool,
     pub visit_count: u32,
     pub ambient_sound: Option<String>,
@@ -110,9 +110,9 @@ pub struct Item {
     pub combinable: bool,
     pub combine_result: Option<String>,
     pub combine_with: Option<String>,
-    pub use_target: Option<String>,  // Room or item ID where it can be used
+    pub use_target: Option<String>, // Room or item ID where it can be used
     pub weight: f32,
-    pub icon: String,               // Emoji or unicode symbol
+    pub icon: String, // Emoji or unicode symbol
     pub takeable: bool,
 }
 
@@ -189,11 +189,11 @@ pub struct Achievement {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GameConfig {
-    pub text_speed: u32,          // ms per character
-    pub sound_volume: f32,        // 0.0 - 1.0
-    pub music_volume: f32,        // 0.0 - 1.0
-    pub font_size: u32,           // px
-    pub theme: String,            // "dark", "cyberpunk", "retro"
+    pub text_speed: u32,   // ms per character
+    pub sound_volume: f32, // 0.0 - 1.0
+    pub music_volume: f32, // 0.0 - 1.0
+    pub font_size: u32,    // px
+    pub theme: String,     // "dark", "cyberpunk", "retro"
     pub show_minimap: bool,
     pub auto_save: bool,
     pub confirm_actions: bool,
