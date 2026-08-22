@@ -2,3 +2,6 @@
 /dist/
 *.tmp
 .DS_Store
+/target/
+/src-tauri/target/
+/src-tauri/gen/

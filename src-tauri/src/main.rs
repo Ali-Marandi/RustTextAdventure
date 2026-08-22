@@ -17,57 +17,69 @@ struct GameState(Mutex<GameEngine>);
 // ============================================================
 
 #[tauri::command]
-fn initialize_game(state: &State<GameState>) -> GameResponse {
+fn initialize_game(state: State<GameState>) -> GameResponse {
     let mut engine = state.0.lock().unwrap();
     engine.new_game();
     engine.get_full_state()
 }
 
 #[tauri::command]
-fn send_command(state: &State<GameState>, command: String) -> GameResponse {
+fn get_game_state(state: State<GameState>) -> GameResponse {
+    let engine = state.0.lock().unwrap();
+    engine.get_current_state()
+}
+
+#[tauri::command]
+fn get_config(state: State<GameState>) -> GameConfig {
+    let engine = state.0.lock().unwrap();
+    engine.get_config()
+}
+
+#[tauri::command]
+fn send_command(state: State<GameState>, command: String) -> GameResponse {
     let mut engine = state.0.lock().unwrap();
     engine.process_command(&command)
 }
 
 #[tauri::command]
-fn save_game(state: &State<GameState>, slot: u32) -> CommandResult {
+fn save_game(state: State<GameState>, slot: u32) -> CommandResult {
     let mut engine = state.0.lock().unwrap();
     engine.save_to_slot(slot)
 }
 
 #[tauri::command]
-fn load_game(state: &State<GameState>, slot: u32) -> CommandResult {
+fn load_game(state: State<GameState>, slot: u32) -> CommandResult {
     let mut engine = state.0.lock().unwrap();
     engine.load_from_slot(slot)
 }
 
 #[tauri::command]
-fn get_save_slots(state: &State<GameState>) -> Vec<SaveSlotInfo> {
+fn get_save_slots(state: State<GameState>) -> Vec<SaveSlotInfo> {
     let engine = state.0.lock().unwrap();
     engine.list_save_slots()
 }
 
 #[tauri::command]
-fn delete_save(state: &State<GameState>, slot: u32) -> CommandResult {
+fn delete_save(state: State<GameState>, slot: u32) -> CommandResult {
     let mut engine = state.0.lock().unwrap();
     engine.delete_save(slot)
 }
 
 #[tauri::command]
-fn update_config(state: &State<GameState>, config: GameConfig) -> CommandResult {
+fn update_config(state: State<GameState>, config: GameConfig) -> CommandResult {
     let mut engine = state.0.lock().unwrap();
     engine.update_config(config);
-    CommandResult::success("Settings updated successfully.".to_string())
+    CommandResult::success("Settings updated successfully.")
 }
 
 #[tauri::command]
-fn get_achievements(state: &State<GameState>) -> serde_json::Value {
+fn get_achievements(state: State<GameState>) -> serde_json::Value {
     let engine = state.0.lock().unwrap();
     serde_json::to_value(engine.get_achievements()).unwrap_or_default()
 }
 
 #[tauri::command]
-fn get_autocomplete(state: &State<GameState>, partial: String) -> Vec<String> {
+fn get_autocomplete(state: State<GameState>, partial: String) -> Vec<String> {
     let engine = state.0.lock().unwrap();
     engine.get_autocomplete_suggestions(&partial)
 }
@@ -80,6 +92,8 @@ fn main() {
         .manage(GameState(Mutex::new(GameEngine::new())))
         .invoke_handler(tauri::generate_handler![
             initialize_game,
+            get_game_state,
+            get_config,
             send_command,
             save_game,
             load_game,

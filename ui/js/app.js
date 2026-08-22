@@ -21,9 +21,10 @@ async function invoke(cmd, args) {
 // ============ INITIALIZATION ============
 async function startNewGame() {
     switchScreen('game-screen');
-    gameState = await invoke('initialize_game', {});
-    if (gameState) renderGameState(gameState);
-    document.getElementById('command-input').focus();
+        gameState = await invoke('initialize_game', {});
+        if (gameState) renderGameState(gameState);
+        await refreshConfig();
+        document.getElementById('command-input').focus();
 }
 
 async function showLoadScreen() {
@@ -56,8 +57,9 @@ async function loadGame(slot) {
     if (result && result.success) {
         closeModal();
         switchScreen('game-screen');
-        gameState = await invoke('initialize_game', {});
+        gameState = await invoke('get_game_state', {});
         if (gameState) renderGameState(gameState);
+        await refreshConfig();
         showNotification(result.message);
     } else {
         showNotification(result?.message || 'Failed to load', true);
@@ -75,15 +77,15 @@ async function saveGame(slot) {
     if (result) showNotification(result.message, !result.success);
 }
 
-function showSaveScreen() {
+async function showSaveScreen() {
     if (!gameState) return;
+    const slots = await invoke('get_save_slots', {});
     let html = '';
-    for (let i = 0; i < 3; i++) {
-        const existing = gameState.saveSlots?.[i];
-        const label = existing?.exists
-            ? `Slot ${i + 1} - ${existing.room_name} (${existing.play_time})`
-            : `Slot ${i + 1} - Empty`;
-        html += `<div class="save-slot" onclick="saveGame(${i})">
+    for (const slot of (slots || [])) {
+        const label = slot.exists
+            ? `Slot ${slot.slot + 1} - ${escapeHtml(slot.room_name)} (${escapeHtml(slot.play_time)})`
+            : `Slot ${slot.slot + 1} - Empty`;
+        html += `<div class="save-slot" onclick="saveGame(${slot.slot})">
             <div class="save-slot-info"><h4>${label}</h4></div>
             <button class="save-slot-action">Save</button>
         </div>`;
@@ -316,25 +318,77 @@ function showHelp() {
     `);
 }
 
-function showSettings() {
+function applyConfig(config) {
+    document.documentElement.dataset.theme = config.theme;
+    document.documentElement.style.setProperty('--font-size', `${config.font_size}px`);
+    document.getElementById('minimap-section')?.classList.toggle('hidden', !config.show_minimap);
+}
+
+async function refreshConfig() {
+    const config = await invoke('get_config', {});
+    if (config) applyConfig(config);
+}
+
+async function showSettings() {
+    const config = await invoke('get_config', {});
+    if (!config) {
+        showNotification('Settings are unavailable.', true);
+        return;
+    }
     showModal('Settings', `
         <div class="setting-row">
             <div><div class="setting-label">Text Speed</div><div class="setting-sublabel">Typing animation delay</div></div>
-            <div class="setting-control"><input type="range" min="0" max="80" value="30"><span id="speed-val" style="font-family:var(--font-mono);font-size:0.8rem;min-width:35px">30ms</span></div>
+            <div class="setting-control"><input id="setting-text-speed" type="range" min="0" max="80" value="${config.text_speed}"><span id="speed-val" style="font-family:var(--font-mono);font-size:0.8rem;min-width:35px">${config.text_speed}ms</span></div>
+        </div>
+        <div class="setting-row">
+            <div><div class="setting-label">Text Size</div></div>
+            <div class="setting-control"><input id="setting-font-size" type="range" min="14" max="24" value="${config.font_size}"><span id="font-size-val" style="font-family:var(--font-mono);font-size:0.8rem;min-width:35px">${config.font_size}px</span></div>
         </div>
         <div class="setting-row">
             <div><div class="setting-label">Theme</div></div>
-            <select><option>Cyberpunk</option><option>Midnight</option><option>Terminal</option></select>
+            <select id="setting-theme">
+                <option value="cyberpunk" ${config.theme === 'cyberpunk' ? 'selected' : ''}>Cyberpunk</option>
+                <option value="dark" ${config.theme === 'dark' ? 'selected' : ''}>Dark</option>
+                <option value="retro" ${config.theme === 'retro' ? 'selected' : ''}>Retro</option>
+            </select>
         </div>
         <div class="setting-row">
             <div><div class="setting-label">Show Minimap</div></div>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            <input id="setting-show-minimap" type="checkbox" ${config.show_minimap ? 'checked' : ''}>
         </div>
         <div class="setting-row">
             <div><div class="setting-label">Auto-Save</div></div>
-            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            <input id="setting-auto-save" type="checkbox" ${config.auto_save ? 'checked' : ''}>
         </div>
+        <button class="save-slot-action" onclick="saveSettings()">Save settings</button>
     `);
+    document.getElementById('setting-text-speed').oninput = (event) => {
+        document.getElementById('speed-val').textContent = `${event.target.value}ms`;
+    };
+    document.getElementById('setting-font-size').oninput = (event) => {
+        document.getElementById('font-size-val').textContent = `${event.target.value}px`;
+    };
+}
+
+async function saveSettings() {
+    const config = {
+        text_speed: Number(document.getElementById('setting-text-speed').value),
+        font_size: Number(document.getElementById('setting-font-size').value),
+        theme: document.getElementById('setting-theme').value,
+        show_minimap: document.getElementById('setting-show-minimap').checked,
+        auto_save: document.getElementById('setting-auto-save').checked,
+        sound_volume: 0.7,
+        music_volume: 0.5,
+        confirm_actions: true,
+    };
+    const result = await invoke('update_config', { config });
+    if (result?.success) {
+        applyConfig(config);
+        closeModal();
+        showNotification(result.message);
+    } else {
+        showNotification(result?.message || 'Could not save settings.', true);
+    }
 }
 
 function showNotification(msg, isError = false) {

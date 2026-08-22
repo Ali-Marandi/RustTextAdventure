@@ -21,7 +21,7 @@ pub fn process_command(engine: &mut GameEngine, raw: &str) -> Vec<GameMessage> {
 
     match verb {
         "help" | "h" | "?" => cmd_help(),
-        "look" | "l" | "examine" | "inspect" => cmd_look(engine, &args),
+        "look" | "l" | "inspect" => cmd_look(engine, &args),
         "go" | "move" | "walk" => cmd_go(engine, &args),
         "north" | "n" => cmd_go(engine, "north"),
         "south" | "s" => cmd_go(engine, "south"),
@@ -120,6 +120,7 @@ fn cmd_look(engine: &mut GameEngine, target: &str) -> Vec<GameMessage> {
 
         engine.player.increment_moves();
     } else {
+        let room = engine.get_current_room();
         if let Some(item) = room
             .items
             .iter()
@@ -174,7 +175,8 @@ fn cmd_go(engine: &mut GameEngine, direction: &str) -> Vec<GameMessage> {
     let exit = engine.rooms[room_idx]
         .exits
         .iter()
-        .find(|e| e.direction == dir);
+        .find(|e| e.direction == dir)
+        .cloned();
 
     match exit {
         None => vec![GameMessage {
@@ -201,7 +203,7 @@ fn cmd_go(engine: &mut GameEngine, direction: &str) -> Vec<GameMessage> {
                         engine.rooms[room_idx].exits[idx].locked = false;
                         engine.player.remove_item(req_item);
                         msgs.push(GameMessage {
-                            text: format!("You use the required item to unlock the passage!"),
+                            text: "You use the required item to unlock the passage!".to_string(),
                             msg_type: MessageType::Success,
                             timestamp: String::new(),
                         });
@@ -292,7 +294,7 @@ fn cmd_go(engine: &mut GameEngine, direction: &str) -> Vec<GameMessage> {
                 timestamp: String::new(),
             });
 
-            if engine.config.auto_save && engine.player.moves % 10 == 0 {
+            if engine.config.auto_save && engine.player.moves.is_multiple_of(10) {
                 let _ = engine.auto_save();
             }
 
@@ -402,7 +404,8 @@ fn cmd_use(engine: &mut GameEngine, target: &str) -> Vec<GameMessage> {
         .player
         .inventory
         .iter()
-        .find(|i| i.id == target_lower || i.name.to_lowercase().contains(&target_lower));
+        .find(|i| i.id == target_lower || i.name.to_lowercase().contains(&target_lower))
+        .cloned();
 
     match item {
         None => vec![GameMessage {

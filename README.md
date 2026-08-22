@@ -163,6 +163,12 @@ RustTextAdventure/
 
 ---
 
+## 🚀 Product Delivery and Validation
+
+The global commercial roadmap is available in [`docs/GLOBAL_COMMERCIAL_ROADMAP_FA.md`](docs/GLOBAL_COMMERCIAL_ROADMAP_FA.md). The current, Tauri-specific delivery backlog is in [`docs/EXECUTION_BACKLOG_FA.md`](docs/EXECUTION_BACKLOG_FA.md), and the landing-page, interview, playtest, and attribution protocols are in [`docs/VALIDATION_TOOLKIT_FA.md`](docs/VALIDATION_TOOLKIT_FA.md).
+
+---
+
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -41,16 +41,19 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           Copy-Item src-tauri/target/x86_64-pc-windows-msvc/release/RustTextAdventure.exe dist/
-          Copy-Item README.md dist/
+          Copy-Item README.md, CHANGELOG.md dist/
           Compress-Archive -Path dist/* -DestinationPath RustTextAdventure_windows_x64.zip -Force
+          Get-FileHash RustTextAdventure_windows_x64.zip -Algorithm SHA256 | ForEach-Object { $_.Hash + "  RustTextAdventure_windows_x64.zip" } | Out-File -Encoding ascii RustTextAdventure_windows_x64.zip.sha256
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: RustTextAdventure_windows_x64.zip
-          name: 'The Rust Laboratory v2.0.0'
+          files: |
+            RustTextAdventure_windows_x64.zip
+            RustTextAdventure_windows_x64.zip.sha256
+          name: 'The Rust Laboratory ${{ github.ref_name }}'
           body: |
-            ## The Rust Laboratory - Text Adventure Game v2.0.0
+            ## The Rust Laboratory - Text Adventure Game ${{ github.ref_name }}
 
             ### Features
             - 14+ interconnected rooms to explore

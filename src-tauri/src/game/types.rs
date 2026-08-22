@@ -154,6 +154,7 @@ pub enum PuzzleType {
     PhysicalInteraction,
 }
 
+#[allow(dead_code, clippy::upper_case_acronyms)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NPC {
     pub id: String,
@@ -166,6 +167,7 @@ pub struct NPC {
     pub gives_condition: Option<String>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DialogueEntry {
     pub id: String,

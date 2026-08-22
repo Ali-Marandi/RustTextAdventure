@@ -125,6 +125,15 @@ impl GameEngine {
         self.get_full_state_with_messages(msgs)
     }
 
+    /// Returns the current state without resetting the session or injecting a new-game intro.
+    pub fn get_current_state(&self) -> GameResponse {
+        self.get_full_state_with_messages(Vec::new())
+    }
+
+    pub fn get_config(&self) -> GameConfig {
+        self.config.clone()
+    }
+
     fn get_full_state_with_messages(&self, messages: Vec<GameMessage>) -> GameResponse {
         let room = self
             .rooms
@@ -449,7 +458,7 @@ impl GameEngine {
         suggestions
     }
 
-    fn auto_save(&self) -> Result<(), String> {
+    pub fn auto_save(&self) -> Result<(), String> {
         let data = save::create_save_data(self, 0);
         save::save_to_disk(&data)
     }

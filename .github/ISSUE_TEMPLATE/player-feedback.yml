@@ -1,0 +1,69 @@
+name: Player feedback
+about: Record structured feedback from a player or playtest session
+labels: ["player-feedback", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for testing The Rust Laboratory. Do not include personal, financial, or sensitive information.
+  - type: input
+    id: build
+    attributes:
+      label: Build or release tested
+      description: For example, v2.0.0 or a commit SHA.
+      placeholder: v2.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Windows
+        - Linux
+        - macOS
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of feedback
+      options:
+        - First-time experience
+        - Command input or autocomplete
+        - Story clarity
+        - Puzzle or hint
+        - Save or load
+        - Minimap or navigation
+        - Accessibility
+        - Performance or stability
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened?
+      description: Describe what you expected, what you observed, and the point in the game where it occurred.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Player impact
+      description: Explain whether it caused confusion, blocked progress, reduced enjoyment, or affected accessibility.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Exact quote or reproduction steps
+      description: Optional. Add an anonymized player quote or numbered reproduction steps.
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Consent
+      options:
+        - label: I understand this feedback may be used in anonymized product decisions.
+          required: true

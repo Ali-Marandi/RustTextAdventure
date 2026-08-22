@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Operational delivery backlog
+    url: https://github.com/Ali-Marandi/RustTextAdventure/blob/master/docs/EXECUTION_BACKLOG_FA.md
+    about: Review delivery priorities and current project decisions before opening a roadmap request.
+  - name: Validation toolkit
+    url: https://github.com/Ali-Marandi/RustTextAdventure/blob/master/docs/VALIDATION_TOOLKIT_FA.md
+    about: Review landing-page, interview, playtest, and attribution protocols.

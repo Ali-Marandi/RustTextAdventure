@@ -4,6 +4,7 @@ use super::types::*;
 // World Builder - Creates the entire game world
 // ============================================================
 
+#[allow(clippy::vec_init_then_push)]
 pub fn create_world() -> Vec<Room> {
     let mut rooms = Vec::new();
 
